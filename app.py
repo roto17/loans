@@ -31,8 +31,13 @@ if uploaded_file is not None:
     st.dataframe(df.head())
 
     try:
-        predictions = best_model.predict(df)
-        probabilities = best_model.predict_proba(df)
+        # Add loader while predictions are running
+        with st.spinner("🔄 Running predictions... Please wait."):
+            predictions = best_model.predict(df)
+            probabilities = best_model.predict_proba(df)
+
+        # Once done, show success message
+        st.success("✅ Predictions completed!")
 
         df["Predicted_Status"] = predictions
         df["Prob_Not_Approved"] = probabilities[:,0].round(3)
